@@ -22,6 +22,8 @@ class Request
 
 		if (isset($info['PATH_INFO'])) {
 			$this->path = $info['PATH_INFO'];
+		}else if(isset($info['REQUEST_URI'])){
+			$this->path = $info['REQUEST_URI'];
 		}else{
 			$this->path = "/";
 		}
