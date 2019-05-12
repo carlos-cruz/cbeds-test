@@ -126,7 +126,7 @@
 				var date_end = $('input[name=date_end]').val();
 				var price = $('input[name=price]').val();
 
-				if (date_start >= date_end) {
+				if (date_start > date_end) {
 					alert('Start date must be lower than End date');
 					return false;
 				}
@@ -192,7 +192,7 @@
 				var date_end = $('input[name=date_end][data-id='+id+']').val();
 				var price = $('input[name=price][data-id='+id+']').val();
 				
-				if (date_start >= date_end) {
+				if (date_start > date_end) {
 					alert('Start date must be lower than End date');
 					getIntervals();
 					return false;
