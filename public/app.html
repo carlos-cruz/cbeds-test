@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cloudbeds Test</title>
+</head>
+<link rel="stylesheet" href="css/bulma.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<body>
+
+	<div class="columns">
+		<div class="column is-4-desktop is-5-tablet">
+			<section class="section">
+				<h1 class="title">Cloudbeds dates</h1>
+				<h2 class="subtitle">Create a new interval</h2>
+
+				<div class="field">
+					<label for="">Start Date:</label>
+					<input type="text" class="input date newdate" data-date="" name="date_start" placeholder="YYYY-MM-DD">
+				</div>
+
+				<div class="field">
+					<label for="">End Date:</label>
+					<input type="text" class="input date newdate" name="date_end" placeholder="YYYY-MM-DD">
+				</div>
+
+				<div class="field">
+					<label for="">Price:</label>
+					<input type="number" step="0.01" class="input newdate" name="price" placeholder="0.00">
+				</div>
+
+				<div class="field">
+					<div class="control">
+						<button class="button is-primary" id="btnSave">Save</button>
+						<button class="button" id="btnClear">Clear</button>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<div class="column">
+			<section class="section">
+				<div class="level">
+					<div>
+						<h1 class="title">Existing Intervals</h1>
+						<h2 class="subtitle">List of existing intervals</h2>
+					</div>
+					<div class="level-right">
+						<button class="button is-danger level-item" id="btnClearDB">Clear Intervals DB</button>
+					</div>
+				</div>
+				
+
+				<table class="table is-bordered is-fullwidth">
+					<thead>
+						<tr>
+							<th>Start Date</th>
+							<th>End Date</th>
+							<th>Price</th>
+							<th>Remove</th>
+						</tr>
+					</thead>
+					<tbody id="tblIntervalRows">
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function(){
+			function getIntervals(){
+				$.ajax({
+					method: "GET",
+					url: "api",
+					type: 'json',
+					success: function(data){
+						$('#tblIntervalRows').html('');
+						html = '';
+                        $.each(data,function(i,val){
+							html += "<tr>"+
+								'<td><input type="text" class="input is-small date" name="date_start" data-id="'+val.id+'" value="'+val.date_start+'"</td>'+
+								'<td><input type="text" class="input is-small date" name="date_end" data-id="'+val.id+'" value="'+val.date_end+'" /></td>'+
+								'<td><input type="text" class="input is-small" name="price" data-id="'+val.id+'" value="'+val.price+'" /></td>'+
+								'<td><div class="level">'+
+										'<div class="level-left">'+
+											'<button class="button is-info is-small btnUpdateInt" data-id="'+val.id+'">Update</button>'+
+										'</div>'+
+										'<div className="level-right">'+
+											'<button class="button is-danger is-small btnRemoveInt" data-id="'+val.id+'">Remove</button></td>'+
+										'</div>'+
+									'</div>'+
+							"</tr>";
+                        });
+						$('#tblIntervalRows').html(html);
+                    },
+                    error: function(data){
+
+                    }
+				});
+			}
+			
+			function clearNewInterval(){
+				$('input.newdate').val('').removeClass('is-danger');
+			}
+
+			$(document.body).on('keyup','.date',function(){
+				if (moment(this.value,'YYYY-MM-DD',true).isValid() === true) {
+					$(this).removeClass('is-danger');
+				}else{
+					$(this).addClass('is-danger');
+				}
+			});
+
+			$("#btnSave").on('click',function(){
+				var date_start = $('input[name=date_start]').val();
+				var date_end = $('input[name=date_end]').val();
+				var price = $('input[name=price]').val();
+
+				if (date_start >= date_end) {
+					alert('Start date must be lower than End date');
+					return false;
+				}
+
+				$.ajax({
+					method: "POST",
+					url: "api/new",
+					data: {date_start: date_start, date_end: date_end, price: price},
+					success: function(data){
+                        getIntervals();
+                        clearNewInterval();
+                    },
+                    error: function(data){
+
+                    }
+
+				});
+			});
+	
+			$('#btnClear').on('click',function(){
+				clearNewInterval();
+			});
+
+
+			$('#btnClearDB').on('click',function(){
+				if (confirm('Are you sure?')) {
+					$.ajax({
+					method: "POST",
+					url: "api/cleardb",
+					success: function(data){
+                        //getIntervals();
+                        $('#tblIntervalRows').html('');
+                    },
+                    error: function(data){
+
+                    }
+
+				});
+				}
+			});
+			
+			$(document.body).on('click','.btnRemoveInt',function(){
+				if (confirm('Are you sure?')) {
+					var id = $(this).data('id');
+					$.ajax({
+						method: "POST",
+						url: "api/delete",
+						data: {id: id},
+						success: function(data){
+	                        getIntervals();
+	                    },
+	                    error: function(data){
+
+	                    }
+
+					});
+				}
+			});
+
+			$(document.body).on('click','.btnUpdateInt',function(){
+				var id = $(this).data('id');
+				var date_start = $('input[name=date_start][data-id='+id+']').val();
+				var date_end = $('input[name=date_end][data-id='+id+']').val();
+				var price = $('input[name=price][data-id='+id+']').val();
+				
+				if (date_start >= date_end) {
+					alert('Start date must be lower than End date');
+					getIntervals();
+					return false;
+				}
+				$.ajax({
+					method: "POST",
+					url: "api/update",
+					data: {id: id, date_start: date_start, date_end: date_end, price: price},
+					success: function(data){
+                        getIntervals();
+                    },
+                    error: function(data){
+
+                    }
+
+				});
+			});
+
+			getIntervals();
+		});
+	</script>
+</body>
+</html>
