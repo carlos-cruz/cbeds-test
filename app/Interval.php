@@ -215,12 +215,12 @@ class Interval
 		}
 		
 		//Intersects Left
-		if ($new_date_start < $old_date_start && $new_date_end < $old_date_end && $new_price != $old_price) {
+		if ($new_date_start <= $old_date_start && $new_date_end < $old_date_end && $new_price != $old_price) {
 			return 'intersects_left';
 		}
 
 		//Intersects Right
-		if ($new_date_start > $old_date_start && $new_date_end > $old_date_end && $new_price != $old_price) {
+		if ($new_date_start > $old_date_start && $new_date_end >= $old_date_end && $new_price != $old_price) {
 			return 'intersects_right';
 		}
 		
