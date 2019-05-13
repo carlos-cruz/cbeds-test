@@ -235,7 +235,7 @@ class Interval
 		}
 
 		//New inside Old
-		if ($new_date_start >= $old_date_start && $new_date_end <= $old_date_end && $new_price != $old_price) {
+		if ($new_date_start > $old_date_start && $new_date_end < $old_date_end && $new_price != $old_price) {
 			return 'new_inside_old';
 		}
 
