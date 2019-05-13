@@ -9,6 +9,17 @@
  - If user tries to save interval that interferes with existing ones in DB, system has to apply last user changes and modify other  intervals in order to apply requirement 3.
  - Any intervals with the same price that can be merged (without gaps between) should be merged.
 
+ ### Demo:
+Demo deployed here http://192.241.207.23 for manual testing
+
  ### Instructions:
 * Install DB dump file on your database server `cbeds_intervals.sql` located under the db folder 
 * Edit the `dbconfig.ini` file with your DB Connection information
+ ### Api endpoints:
+ Method | Endpoint | Fields | Description |
+------|------------|------|----------|
+GET | /api |  |Get all intervals |
+POST | /api/new | date_start, date_end, price | Save an interval |
+POST | /api/update | date_start, date_end, price | Updates an interval |
+POST | /api/cleardb | | Clears intervals DB table |
+POST | api/delete | id | Deletes an interval |
