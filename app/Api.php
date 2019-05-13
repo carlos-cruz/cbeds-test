@@ -52,7 +52,6 @@ class Api
 	 */
 	public function update(Request $req){
 		$this->interval = new Interval([
-			'id' => $req->post('id'),
 			'date_start' => $req->post('date_start'),
 			'date_end' => $req->post('date_end'),
 			'price' => $req->post('price')
@@ -138,6 +137,7 @@ class Api
 		if ($saveNewInterval) {
 			$this->changes[] = $this->interval;
 		}
+
 
 		try{
 			$this->saveChanges();
