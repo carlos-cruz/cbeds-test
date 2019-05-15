@@ -27,7 +27,7 @@
  	 * Returns the callback registered for the route
  	 * @return function
  	 */
- 	public function callback(): Response
+ 	public function callback(): ViewAbstract
  	{
 		if (strpos($this->callback, '@') ) {
 			$callback = explode('@', $this->callback);
@@ -41,8 +41,7 @@
 			}
 		}else{
 			//If view
-			return new Response(200,$this->headers,$this->callback);
-			//echo $this->callback;
+			return new HtmlView($this->callback);
 		}
  	}
 
