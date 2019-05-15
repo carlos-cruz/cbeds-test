@@ -22,4 +22,4 @@ GET | /api |  |Get all intervals |
 POST | /api | date_start, date_end, price | Save an interval |
 PUT | /api | date_start, date_end, price | Updates an interval |
 POST | /api/cleardb | | Clears intervals DB table |
-DELETE | api | id | Deletes an interval |
+DELETE | /api | id | Deletes an interval |
