@@ -3,7 +3,7 @@
 /**
 * 
 */
-class Api
+class Api implements RestfullControllerInterface
 {
 	private $interval;
 	private static $instance;
@@ -23,21 +23,22 @@ class Api
 
 	/**
 	 * Returns all intervals
-	 * @return [type] [description]
+	 * @return JsonView
 	 */
-	public function get(): Response
+	public function get(): ViewAbstract
 	{
 		$results = self::db()->query('SELECT * FROM prices ORDER BY date_start');
 
-		return new Response(200,['Content-Type' => 'application/json'],json_encode($results));
+
+		return new JsonView($results);
 	}
 
 	/**
 	 * Creates a new Interval and resolves conflicts
 	 * @param  Request
-	 * @return [type]
+	 * @return JsonView
 	 */
-	public function store(Request $req): Response
+	public function store(Request $req): ViewAbstract
 	{
 		$this->interval = new Interval([
 			'date_start' => $req->data('date_start'),
@@ -45,17 +46,23 @@ class Api
 			'price' => $req->data('price')
 		]);
 
-		$this->resolve();
 
-		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
+		try{
+			
+			$this->resolve();
+			return new JsonView(['message' => 'success']);
+
+		}catch(Exception $e){
+			return new JsonView(['error' => $e->getMessage()],500);
+		}
 	}
 
 	/**
 	 * Updates an existing Interval and resolves conflicts
 	 * @param  Request
-	 * @return [type]
+	 * @return JsonView
 	 */
-	public function update(Request $req): Response
+	public function update(Request $req): ViewAbstract
 	{
 		$this->interval = new Interval([
 			'date_start' => $req->data('date_start'),
@@ -64,33 +71,46 @@ class Api
 		]);
 
 
-		$this->resolve();
-		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
+		try{
+			
+			$this->resolve();
+			return new JsonView(['message' => 'success']);
+
+		}catch(Exception $e){
+			return new JsonView(['error' => $e->getMessage()],500);
+		}
 	}
 
 	/**
 	 * Deletes an existing Interval
 	 * @param  Request
-	 * @return [type]
+	 * @return JsonView
 	 */
-	public function delete(Request $req){
+	public function delete(Request $req): ViewAbstract
+	{
 		$res = self::db()->getCollection('SELECT * FROM prices WHERE id=:id ORDER BY date_start',[
 			'id' => $req->data('id')
 		]);
 		$this->interval = $res[0];
 
 		$this->interval->delete();
-
-		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
+		return new JsonView(['message' => 'success']);
 	}
 
 	/**
 	 * Clears the intervals table
-	 * @return [type]
+	 * @return JsonView
 	 */
-	public function clearDB(){
-		self::db()->clearDb();
-		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
+	public function clearDB(): ViewAbstract
+	{
+
+		try{
+			self::db()->clearDb();
+			return new JsonView(['message' => 'success']);
+
+		}catch(Exception $e){
+			return new JsonView(['error' => $e->getMessage()],500);
+		}
 	}
 
 	/**
@@ -104,8 +124,7 @@ class Api
 
 
 	/**
-	 * @param  Resolves conflicts with the new Interval
-	 * @return [type]
+	 * Resolves conflicts with the new Interval
 	 */
 	private function resolve()
 	{
@@ -144,11 +163,7 @@ class Api
 		}
 
 
-		try{
-			$this->saveChanges();
-		}catch(Exception $e){
-			return ['Error' => $e->getMessage()];
-		}
+		$this->saveChanges();
 	}
 
 	/**
