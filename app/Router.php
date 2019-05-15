@@ -14,10 +14,10 @@ class Router
 		//Register App routes
 		$this->routes[] = new Route('/',file_get_contents('../public/app.html'));
 		$this->routes[] = new Route('/api','Api@get','application/json');
-		$this->routes[] = new Route('/api/new','Api@create','application/json','POST');
-		$this->routes[] = new Route('/api/update','Api@update','application/json','POST');
+		$this->routes[] = new Route('/api','Api@store','application/json','POST');
+		$this->routes[] = new Route('/api','Api@update','application/json','PUT');
 		$this->routes[] = new Route('/api/cleardb','Api@clearDB','application/json','POST');
-		$this->routes[] = new Route('/api/delete','Api@delete','application/json','POST');
+		$this->routes[] = new Route('/api','Api@delete','application/json','DELETE');
 	}
 
 	public static function getInstance()

@@ -42,7 +42,9 @@ class App
 	 */
 	public function getRequest(): Request
 	{
-		return new Request($_SERVER);
+		//Get php://input for PUT and DELETE methods
+		parse_str(file_get_contents('php://input'), $_DATA);
+		return new Request($_SERVER, $_GET + $_POST + $_DATA);
 	}
 
 }

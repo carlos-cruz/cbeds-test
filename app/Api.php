@@ -35,11 +35,11 @@ class Api
 	 * @param  Request
 	 * @return [type]
 	 */
-	public function create(Request $req){
+	public function store(Request $req){
 		$this->interval = new Interval([
-			'date_start' => $req->post('date_start'),
-			'date_end' => $req->post('date_end'),
-			'price' => $req->post('price')
+			'date_start' => $req->data('date_start'),
+			'date_end' => $req->data('date_end'),
+			'price' => $req->data('price')
 		]);
 
 		return json_encode($this->resolve());
@@ -52,9 +52,9 @@ class Api
 	 */
 	public function update(Request $req){
 		$this->interval = new Interval([
-			'date_start' => $req->post('date_start'),
-			'date_end' => $req->post('date_end'),
-			'price' => $req->post('price')
+			'date_start' => $req->data('date_start'),
+			'date_end' => $req->data('date_end'),
+			'price' => $req->data('price')
 		]);
 
 
@@ -68,7 +68,7 @@ class Api
 	 */
 	public function delete(Request $req){
 		$res = self::db()->getCollection('SELECT * FROM prices WHERE id=:id ORDER BY date_start',[
-			'id' => $req->post('id')
+			'id' => $req->data('id')
 		]);
 		$this->interval = $res[0];
 

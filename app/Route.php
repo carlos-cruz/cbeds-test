@@ -60,6 +60,8 @@
  	 */
  	public function matches(Request $req){
  		if ($this->path == $req->getPath() && $this->method == $req->getMethod()) {
+ 			//print($this->path.' - ' . $req->getMethod());die();
+
  			$this->setRequest($req);
  			return true;
  		}else{

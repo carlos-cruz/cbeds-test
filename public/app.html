@@ -133,7 +133,7 @@
 
 				$.ajax({
 					method: "POST",
-					url: "api/new",
+					url: "api",
 					data: {date_start: date_start, date_end: date_end, price: price},
 					success: function(data){
                         getIntervals();
@@ -172,8 +172,8 @@
 				if (confirm('Are you sure?')) {
 					var id = $(this).data('id');
 					$.ajax({
-						method: "POST",
-						url: "api/delete",
+						method: "DELETE",
+						url: "api",
 						data: {id: id},
 						success: function(data){
 	                        getIntervals();
@@ -198,8 +198,8 @@
 					return false;
 				}
 				$.ajax({
-					method: "POST",
-					url: "api/update",
+					method: "PUT",
+					url: "api",
 					data: {id: id, date_start: date_start, date_end: date_end, price: price},
 					success: function(data){
                         getIntervals();
