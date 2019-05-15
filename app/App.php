@@ -32,7 +32,8 @@ class App
 		$request = $this->getRequest();
 		$route = Router::getRoute($request);
 		//Execute Route callback and return the results
-		return $route->callback();
+		$response = $route->callback();
+		$response->output();
 	}
 
 	

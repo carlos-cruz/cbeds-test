@@ -25,9 +25,11 @@ class Api
 	 * Returns all intervals
 	 * @return [type] [description]
 	 */
-	public function get(){
+	public function get(): Response
+	{
 		$results = self::db()->query('SELECT * FROM prices ORDER BY date_start');
-		return json_encode($results);
+
+		return new Response(200,['Content-Type' => 'application/json'],json_encode($results));
 	}
 
 	/**
@@ -35,14 +37,17 @@ class Api
 	 * @param  Request
 	 * @return [type]
 	 */
-	public function store(Request $req){
+	public function store(Request $req): Response
+	{
 		$this->interval = new Interval([
 			'date_start' => $req->data('date_start'),
 			'date_end' => $req->data('date_end'),
 			'price' => $req->data('price')
 		]);
 
-		return json_encode($this->resolve());
+		$this->resolve();
+
+		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
 	}
 
 	/**
@@ -50,7 +55,8 @@ class Api
 	 * @param  Request
 	 * @return [type]
 	 */
-	public function update(Request $req){
+	public function update(Request $req): Response
+	{
 		$this->interval = new Interval([
 			'date_start' => $req->data('date_start'),
 			'date_end' => $req->data('date_end'),
@@ -58,7 +64,8 @@ class Api
 		]);
 
 
-		return json_encode($this->resolve());
+		$this->resolve();
+		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
 	}
 
 	/**
@@ -74,7 +81,7 @@ class Api
 
 		$this->interval->delete();
 
-		return json_encode(['message' => 'success']);
+		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
 	}
 
 	/**
@@ -83,7 +90,7 @@ class Api
 	 */
 	public function clearDB(){
 		self::db()->clearDb();
-		return json_encode(['message' => 'success']);
+		return new Response(200,['Content-Type' => 'application/json'],json_encode(['message' => 'success']));
 	}
 
 	/**
@@ -142,8 +149,6 @@ class Api
 		}catch(Exception $e){
 			return ['Error' => $e->getMessage()];
 		}
-
-		return ['message' => 'Success'];
 	}
 
 	/**

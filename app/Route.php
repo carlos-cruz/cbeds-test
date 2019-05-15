@@ -15,7 +15,7 @@
 
  	private $request;
  	
- 	function __construct(String $path,$callback,String $headers='text/html',String $method='GET')
+ 	function __construct(String $path,String $callback,Array $headers=['Content-Type' => 'text/html'],String $method='GET')
  	{
  		$this->path = $path;
  		$this->callback = $callback;
@@ -27,10 +27,8 @@
  	 * Returns the callback registered for the route
  	 * @return function
  	 */
- 	public function callback()
+ 	public function callback(): Response
  	{
-		header("Content-Type: ".$this->headers, true);
-
 		if (strpos($this->callback, '@') ) {
 			$callback = explode('@', $this->callback);
 			$method = $callback[1];
@@ -43,7 +41,8 @@
 			}
 		}else{
 			//If view
-			echo $this->callback;
+			return new Response(200,$this->headers,$this->callback);
+			//echo $this->callback;
 		}
  	}
 
