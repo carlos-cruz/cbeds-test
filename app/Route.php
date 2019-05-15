@@ -10,12 +10,11 @@
 
  	private $path;
  	private $callback;
- 	private $headers;
  	private $method;
 
  	private $request;
  	
- 	function __construct(String $path,String $callback,Array $headers=['Content-Type' => 'text/html'],String $method='GET')
+ 	function __construct(String $path,String $callback,String $method='GET')
  	{
  		$this->path = $path;
  		$this->callback = $callback;
