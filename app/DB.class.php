@@ -10,7 +10,7 @@ class DB
 	private $connection;
 	private static $_instance;
 
-	function __construct()
+	private function __construct()
 	{
 		try{
 			$config = parse_ini_file('../dbconfig.ini');

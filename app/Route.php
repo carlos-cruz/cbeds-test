@@ -35,7 +35,7 @@
 			$callback = explode('@', $this->callback);
 			$method = $callback[1];
 
-			$instance = new $callback[0];
+			$instance = $callback[0]::getInstance();
 
 			if (method_exists($instance, $method)) {
 				

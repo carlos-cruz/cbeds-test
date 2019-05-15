@@ -11,7 +11,7 @@ class Api
 	protected $changes = [];
 	protected $delete = [];
 
-	function __construct(){	}
+	private function __construct(){	}
 
 	public static function getInstance(): self
 	{
@@ -75,8 +75,6 @@ class Api
 		$this->interval->delete();
 
 		return json_encode(['message' => 'success']);
-
-		//return json_encode($this->resolve('removal'));
 	}
 
 	/**

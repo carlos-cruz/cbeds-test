@@ -13,7 +13,7 @@ class App
 	private $routes = [];
 
 	
-	function __construct()
+	private function __construct()
 	{
 		$this->db = DB::getInstance();
 
