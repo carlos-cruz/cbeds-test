@@ -12,7 +12,7 @@ class Router
 	private function __construct()
 	{
 		//Register App routes
-		$this->routes[] = new Route('/',file_get_contents('../public/app.html'));
+		$this->routes[] = new Route('/','../public/app.html');
 		$this->routes[] = new Route('/api','Api@get',['Content-Type' => 'application/json']);
 		$this->routes[] = new Route('/api','Api@store',['Content-Type' => 'application/json'],'POST');
 		$this->routes[] = new Route('/api','Api@update',['Content-Type' => 'application/json'],'PUT');
