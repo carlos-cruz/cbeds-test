@@ -52,7 +52,7 @@ class Router
 				return $route;
 			}
 		}
-		return new Route('','Page not found :(');
+		return new Route('','../views/404.html');
 	}
 }
 
