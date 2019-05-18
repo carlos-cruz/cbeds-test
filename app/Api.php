@@ -1,5 +1,13 @@
 <?php 
 
+namespace App;
+
+use App\DB;
+use App\Views\ViewAbstract;
+use App\Views\JsonView;
+use App\Interfaces\RestfullControllerInterface;
+use App\Interval;
+
 /**
 * 
 */
@@ -40,19 +48,17 @@ class Api implements RestfullControllerInterface
 	 */
 	public function store(Request $req): ViewAbstract
 	{
-		$this->interval = new Interval([
-			'date_start' => $req->data('date_start'),
-			'date_end' => $req->data('date_end'),
-			'price' => $req->data('price')
-		]);
-
-
 		try{
+			$this->interval = new Interval([
+				'date_start' => $req->data('date_start'),
+				'date_end' => $req->data('date_end'),
+				'price' => $req->data('price')
+			]);
 			
 			$this->resolve();
 			return new JsonView(['message' => 'success']);
 
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			return new JsonView(['error' => $e->getMessage()],500);
 		}
 	}
@@ -64,19 +70,18 @@ class Api implements RestfullControllerInterface
 	 */
 	public function update(Request $req): ViewAbstract
 	{
-		$this->interval = new Interval([
-			'date_start' => $req->data('date_start'),
-			'date_end' => $req->data('date_end'),
-			'price' => $req->data('price')
-		]);
-
-
 		try{
+			$this->interval = new Interval([
+				'date_start' => $req->data('date_start'),
+				'date_end' => $req->data('date_end'),
+				'price' => $req->data('price')
+			]);
+
 			
 			$this->resolve();
 			return new JsonView(['message' => 'success']);
 
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			return new JsonView(['error' => $e->getMessage()],500);
 		}
 	}
@@ -108,7 +113,7 @@ class Api implements RestfullControllerInterface
 			self::db()->clearDb();
 			return new JsonView(['message' => 'success']);
 
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			return new JsonView(['error' => $e->getMessage()],500);
 		}
 	}

@@ -1,5 +1,7 @@
 <?php 
+namespace App\Http;
 
+use App\Views\JsonView;
 
 /**
 * 

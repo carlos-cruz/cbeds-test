@@ -1,4 +1,7 @@
 <?php 
+namespace App\Interfaces;
+use App\Views\ViewAbstract;
+use App\Request;
 
 /**
  * Interface for RestfullControllers

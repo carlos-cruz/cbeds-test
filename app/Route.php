@@ -1,6 +1,9 @@
 <?php 
+namespace App;
 
-
+use App\Request;
+use App\Views\ViewAbstract;
+use App\Views\HtmlView;
 
 /**
   * 
@@ -18,7 +21,6 @@
  	{
  		$this->path = $path;
  		$this->callback = $callback;
- 		$this->headers = $headers;
  		$this->method = $method;
  	}
 

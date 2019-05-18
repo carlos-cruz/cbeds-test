@@ -1,5 +1,10 @@
 <?php 
 
+namespace App;
+
+use App\Route;
+use App\Request;
+
 /**
  * 
  */
@@ -13,11 +18,11 @@ class Router
 	{
 		//Register App routes
 		$this->routes[] = new Route('/','../public/app.html');
-		$this->routes[] = new Route('/api','Api@get');
-		$this->routes[] = new Route('/api','Api@store','POST');
-		$this->routes[] = new Route('/api','Api@update','PUT');
-		$this->routes[] = new Route('/api/cleardb','Api@clearDB','POST');
-		$this->routes[] = new Route('/api','Api@delete','DELETE');
+		$this->routes[] = new Route('/api','App\Api@get');
+		$this->routes[] = new Route('/api','App\Api@store','POST');
+		$this->routes[] = new Route('/api','App\Api@update','PUT');
+		$this->routes[] = new Route('/api/cleardb','App\Api@clearDB','POST');
+		$this->routes[] = new Route('/api','App\Api@delete','DELETE');
 	}
 
 	public static function getInstance()

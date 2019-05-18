@@ -1,5 +1,5 @@
 <?php
-
+namespace App;
 
 /**
 * 
@@ -41,7 +41,7 @@ class Interval
 
 		//Check if valid interval
 		if (!$this->validInterval()) {
-			throw new Exception("Starting date must be lower than End date", 1);	
+			throw new \Exception("Starting date must be lower than End date", 1);	
 		}
 	}
 
@@ -77,7 +77,7 @@ class Interval
 		if ($this->validateDate($date)) {
 			$this->date_start = $date;
 		}else{
-			throw new Exception('Invalid Date: ');
+			throw new \Exception('Invalid Date');
 		}
 
 	}
@@ -92,7 +92,7 @@ class Interval
 		if ($this->validateDate($date)) {
 			$this->date_end = $date;
 		}else{
-			throw new Exception("Invalid Date");
+			throw new \Exception("Invalid Date");
 		}
 	}
 
@@ -114,7 +114,7 @@ class Interval
 	 */
 	public function validateDate(String $date, $format = 'Y-m-d')
 	{
-		$d = DateTime::createFromFormat($format, $date);
+		$d = \DateTime::createFromFormat($format, $date);
 		return $d && $d->format($format) === $date;
 	}
 
@@ -152,7 +152,7 @@ class Interval
 				]);
 				$this->id = $id;
 			}
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			echo 'Error: '.$e->getMessage();
 		}
 	}
@@ -168,7 +168,7 @@ class Interval
 			]);
 			
 			return true;
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			echo 'Error: '.$e->getMessage();
 		}
 	}

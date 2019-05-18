@@ -1,5 +1,15 @@
 <?php 
+namespace App;
 
+use App\DB;
+use App\Request;
+use App\Router;
+use App\Http\Response;
+use App\Http\JsonResponse;
+use App\Http\HtmlResponse;
+use App\Views\JsonView;
+use App\Views\HtmlView;
+use App\Views\ViewAbstract;
 
 /**
  * 
@@ -36,6 +46,7 @@ class App
 
 		//Return a response
 		$response = $this->prepareResponse($view);
+
 		$response->output();
 	}
 
