@@ -19,7 +19,7 @@ Demo deployed here http://192.241.207.23 for manual testing
  Method | Endpoint | Fields | Description |
 ------|------------|------|----------|
 GET | /api |  |Get all intervals |
-POST | /api/new | date_start, date_end, price | Save an interval |
-POST | /api/update | date_start, date_end, price | Updates an interval |
+POST | /api | date_start, date_end, price | Save an interval |
+PUT | /api | date_start, date_end, price | Updates an interval |
 POST | /api/cleardb | | Clears intervals DB table |
-POST | api/delete | id | Deletes an interval |
+DELETE | /api | id | Deletes an interval |

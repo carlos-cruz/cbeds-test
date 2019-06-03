@@ -1,6 +1,9 @@
 <?php 
+namespace App;
 
-
+use App\Request;
+use App\Views\ViewAbstract;
+use App\Views\HtmlView;
 
 /**
   * 
@@ -10,16 +13,14 @@
 
  	private $path;
  	private $callback;
- 	private $headers;
  	private $method;
 
  	private $request;
  	
- 	function __construct(String $path,$callback,String $headers='text/html',String $method='GET')
+ 	function __construct(String $path,String $callback,String $method='GET')
  	{
  		$this->path = $path;
  		$this->callback = $callback;
- 		$this->headers = $headers;
  		$this->method = $method;
  	}
 
@@ -27,15 +28,13 @@
  	 * Returns the callback registered for the route
  	 * @return function
  	 */
- 	public function callback()
+ 	public function callback(): ViewAbstract
  	{
-		header("Content-Type: ".$this->headers, true);
-
 		if (strpos($this->callback, '@') ) {
 			$callback = explode('@', $this->callback);
 			$method = $callback[1];
 
-			$instance = new $callback[0];
+			$instance = $callback[0]::getInstance();
 
 			if (method_exists($instance, $method)) {
 				
@@ -43,7 +42,7 @@
 			}
 		}else{
 			//If view
-			echo $this->callback;
+			return new HtmlView($this->callback);
 		}
  	}
 
@@ -60,6 +59,8 @@
  	 */
  	public function matches(Request $req){
  		if ($this->path == $req->getPath() && $this->method == $req->getMethod()) {
+ 			//print($this->path.' - ' . $req->getMethod());die();
+
  			$this->setRequest($req);
  			return true;
  		}else{

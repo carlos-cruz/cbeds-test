@@ -1,5 +1,15 @@
 <?php 
+namespace App;
 
+use App\DB;
+use App\Request;
+use App\Router;
+use App\Http\Response;
+use App\Http\JsonResponse;
+use App\Http\HtmlResponse;
+use App\Views\JsonView;
+use App\Views\HtmlView;
+use App\Views\ViewAbstract;
 
 /**
  * 
@@ -10,20 +20,10 @@ class App
 
 	private static $instance;
 
-	private $routes = [];
-
 	
-	function __construct()
+	private function __construct()
 	{
 		$this->db = DB::getInstance();
-
-		//Register App routes
-		$this->routes[] = new Route('/',file_get_contents('../public/app.html'));
-		$this->routes[] = new Route('/api','Api@get','application/json');
-		$this->routes[] = new Route('/api/new','Api@create','application/json','POST');
-		$this->routes[] = new Route('/api/update','Api@update','application/json','POST');
-		$this->routes[] = new Route('/api/cleardb','Api@clearDB','application/json','POST');
-		$this->routes[] = new Route('/api/delete','Api@delete','application/json','POST');
 	}
 
 	public static function getInstance(){
@@ -35,29 +35,19 @@ class App
 
 	/**
 	 * Run the Application
-	 * @return [type]
 	 */
 	public function run()
 	{
 		$request = $this->getRequest();
-		$route = $this->getRoute($request);
-		//Execute Route callback and return the results
-		return $route->callback();
-	}
+		$route = Router::getRoute($request);
 
-	/**
-	 * Returns the corresponding Route according to Request
-	 * @param  Request
-	 * @return Route
-	 */
-	public function getRoute(Request $req): Route
-	{
-		foreach ($this->routes as $route) {
-			if ($route->matches($req)) {
-				return $route;
-			}
-		}
-		return new Route('','Page not found :(');
+		//Execute Route callback to get a View
+		$view = $route->callback();
+
+		//Return a response
+		$response = $this->prepareResponse($view);
+
+		$response->output();
 	}
 
 	
@@ -67,7 +57,23 @@ class App
 	 */
 	public function getRequest(): Request
 	{
-		return new Request($_SERVER);
+		//Get php://input for PUT and DELETE methods
+		parse_str(file_get_contents('php://input'), $_DATA);
+		return new Request($_SERVER, $_GET + $_POST + $_DATA);
+	}
+
+	/**
+	 * Prepares the Response depending on the received View
+	 * @param  View   $view
+	 * @return Response
+	 */
+	public function prepareResponse(ViewAbstract $view): Response
+	{
+		if ($view instanceof  JsonView) {
+			return new JsonResponse($view,$view->getCode());
+		}else if ($view instanceof  HtmlView) {
+			return new HtmlResponse($view,$view->getCode());
+		}
 	}
 
 }

@@ -1,4 +1,5 @@
 <?php 
+namespace App;
 
 /**
  * Database class
@@ -10,13 +11,13 @@ class DB
 	private $connection;
 	private static $_instance;
 
-	function __construct()
+	private function __construct()
 	{
 		try{
 			$config = parse_ini_file('../dbconfig.ini');
-			$this->connection = new PDO('mysql:host='.$config["host"].';dbname='.$config["database"], $config['user'], $config['password']);
-			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		}catch(PDOException $e){
+			$this->connection = new \PDO('mysql:host='.$config["host"].';dbname='.$config["database"], $config['user'], $config['password']);
+			$this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		}catch(\PDOException $e){
 			echo $e->getMessage();
 		}
 	}
@@ -36,7 +37,7 @@ class DB
 	function query(String $q): Array
 	{
 		$stmt = $this->connection->query($q);
-		$stmt->setFetchMode(PDO::FETCH_ASSOC); 
+		$stmt->setFetchMode(\PDO::FETCH_ASSOC); 
 		$result = $stmt->fetchAll();
 
 		return $result;
@@ -52,7 +53,7 @@ class DB
 		try{
 			$stmt = $this->connection->prepare($query);
 			$stmt->execute($values);
-			$stmt->setFetchMode(PDO::FETCH_ASSOC); 
+			$stmt->setFetchMode(\PDO::FETCH_ASSOC); 
 			$results = $stmt->fetchAll();
 			
 			
@@ -65,7 +66,7 @@ class DB
 
 			return $collection;
 
-		}catch(PDOException $e){
+		}catch(\PDOException $e){
 			echo 'Error: '.$e->getMessage();
 		}
 	}
@@ -84,7 +85,7 @@ class DB
 
 			return $this->connection->lastInsertId();
 			
-		}catch(PDOException $e){
+		}catch(\PDOException $e){
 			echo 'Error: '.$e->getMessage();
 		}
 	}

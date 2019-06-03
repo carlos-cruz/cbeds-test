@@ -1,16 +1,10 @@
 <?php
+require '../vendor/autoload.php';
 
-include '../app/DB.class.php';
-include '../app/Interval.php';
-include '../app/Request.php';
-include '../app/Route.php';
-include '../app/Api.php';
-
-include '../app/App.php';
-
+use App\App;
 
 $app = App::getInstance();
 
-echo $app->run();
+$app->run();
 
 ?>

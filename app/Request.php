@@ -1,5 +1,7 @@
 <?php 
 
+namespace App;
+
 /**
  * 
  */
@@ -8,16 +10,16 @@ class Request
 	
 	private $method;
 	private $path;
-	private $post = [];
+	private $data = [];
 
-	function __construct(Array $info)
+	function __construct(Array $info, Array $data)
 	{
 		if (isset($info['REQUEST_METHOD'])) {
 			$this->method = $info['REQUEST_METHOD'];
 		}
 
-		if (isset($_POST)) {
-			$this->post = $_POST;
+		if (isset($data)) {
+			$this->data = $data;
 		}
 
 		if (isset($info['PATH_INFO'])) {
@@ -40,14 +42,14 @@ class Request
 	}
 
 	/**
-	 * Returns a post field value from the request
+	 * Returns a value from the request
 	 * @param  String
 	 * @return [type]
 	 */
-	public function post(String $field)
+	public function data(String $field)
 	{
-		if ($field != null && isset($this->post[$field])) {
-			return $this->post[$field];
+		if ($field != null && isset($this->data[$field])) {
+			return $this->data[$field];
 		}
 	}
 
